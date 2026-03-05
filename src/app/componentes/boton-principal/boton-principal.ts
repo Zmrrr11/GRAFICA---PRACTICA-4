@@ -1,26 +1,26 @@
-import { Component } from '@angular/core';
-import * as THREE from 'three';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-boton-principal',
   standalone: true,
-  template: '',
+  template: `
+    <button class="glass-button">{{ label }}</button>
+  `,
+  styles: [`
+    .glass-button {
+      background: #4facfe;
+      color: white;
+      border: none;
+      padding: 12px;
+      border-radius: 8px;
+      width: 100%;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+    .glass-button:hover { background: #00f2fe; }
+  `]
 })
-export class BotonPrincipal {
-
-  crear(): THREE.Mesh {
-    const geo = new THREE.CapsuleGeometry(0.2, 1.2, 8, 16);
-    const mat = new THREE.MeshStandardMaterial({ 
-      color: 0x00ff88, 
-      emissive: 0x002211, 
-      roughness: 0.1 
-    });
-    
-    const boton = new THREE.Mesh(geo, mat);
-    boton.rotation.z = Math.PI / 2; 
-    boton.position.y = -1.5;
-    boton.userData = { tipo: 'boton' };
-
-    return boton;
-  }
+export class BotonPrincipalComponent {
+  @Input() label: string = 'Boton';
 }

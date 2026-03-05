@@ -1,36 +1,27 @@
-import { Component } from '@angular/core';
-import * as THREE from 'three';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'app-campo-entrada',
   standalone: true,
-  template: '', // Lógica pura de Three.js
+  template: `
+    <div class="input-group">
+      <input type="text" [placeholder]="placeholder" class="glass-input">
+    </div>
+  `,
+  styles: [`
+    .glass-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 8px;
+      padding: 12px;
+      color: white;
+      width: 100%;
+      margin-bottom: 15px;
+      backdrop-filter: blur(5px);
+      box-sizing: border-box;
+    }
+  `]
 })
-export class CampoEntrada {
-  // Fabricamos el objeto 3D del input
-  crear(y: number, etiqueta: string): THREE.Group {
-    const grupo = new THREE.Group();
-
-    // Fondo del campo (Semi-transparente)
-    const geo = new THREE.PlaneGeometry(3.5, 0.6);
-    const mat = new THREE.MeshPhongMaterial({ 
-      color: 0x000000, 
-      transparent: true, 
-      opacity: 0.5 
-    });
-    const fondo = new THREE.Mesh(geo, mat);
-
-    // Marco de neón (Regla GUI: Visibilidad clara)
-    const bordesGeo = new THREE.EdgesGeometry(geo);
-    const bordesMat = new THREE.LineBasicMaterial({ color: 0x00f3ff });
-    const marco = new THREE.LineSegments(bordesGeo, bordesMat);
-
-    grupo.add(fondo, marco);
-    grupo.position.y = y;
-    
-    // Metadata para que el VisorEscena sepa qué es
-    grupo.userData = { tipo: 'input', id: etiqueta };
-
-    return grupo;
-  }
+export class CampoEntradaComponent {
+  @Input() placeholder: string = '';
 }
