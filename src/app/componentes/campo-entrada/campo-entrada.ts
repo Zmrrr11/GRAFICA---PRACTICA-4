@@ -1,51 +1,36 @@
-// campo-entrada.component.ts
 import { Component } from '@angular/core';
 import * as THREE from 'three';
 
 @Component({
   selector: 'app-campo-entrada',
   standalone: true,
-  template: 'sadas', 
+  template: '', // Lógica pura de Three.js
 })
 export class CampoEntrada {
+  // Fabricamos el objeto 3D del input
+  crear(y: number, etiqueta: string): THREE.Group {
+    const grupo = new THREE.Group();
 
-  /**
-   * Crea un campo de texto 3D estilizado
-    @param yPos 
-    @param etiqueta 
-   */
-  crearInput(yPos: number, etiqueta: string): THREE.Group {
-    const grupoInput = new THREE.Group();
-
-    const geometriaCaja = new THREE.PlaneGeometry(3.5, 0.6);
-    const materialCaja = new THREE.MeshPhongMaterial({
-      color: 0x111111,
-      transparent: true,
-      opacity: 0.7,
-      side: THREE.DoubleSide
+    // Fondo del campo (Semi-transparente)
+    const geo = new THREE.PlaneGeometry(3.5, 0.6);
+    const mat = new THREE.MeshPhongMaterial({ 
+      color: 0x000000, 
+      transparent: true, 
+      opacity: 0.5 
     });
-    const fondo = new THREE.Mesh(geometriaCaja, materialCaja);
-    const bordesGeo = new THREE.EdgesGeometry(geometriaCaja);
-    const bordesMat = new THREE.LineBasicMaterial({ color: 0x00ffff }); // Color cian neón
-    const contorno = new THREE.LineSegments(bordesGeo, bordesMat);
+    const fondo = new THREE.Mesh(geo, mat);
 
-    // 3. Icono Simulado (Un pequeño cuadrado al inicio)
-    const iconoGeo = new THREE.PlaneGeometry(0.3, 0.3);
-    const iconoMat = new THREE.MeshBasicMaterial({ color: 0x00ffff });
-    const icono = new THREE.Mesh(iconoGeo, iconoMat);
-    icono.position.x = -1.4; // Posicionado a la izquierda del campo
+    // Marco de neón (Regla GUI: Visibilidad clara)
+    const bordesGeo = new THREE.EdgesGeometry(geo);
+    const bordesMat = new THREE.LineBasicMaterial({ color: 0x00f3ff });
+    const marco = new THREE.LineSegments(bordesGeo, bordesMat);
 
-    // Unir todo
-    grupoInput.add(fondo, contorno, icono);
-    grupoInput.position.set(0, yPos, 0.1); // Un poco adelantado para evitar z-fighting con el fondo 360
+    grupo.add(fondo, marco);
+    grupo.position.y = y;
     
-    // Datos para el Raycaster (Diferenciación de IA)
-    grupoInput.userData = { 
-      tipo: 'input', 
-      id: etiqueta,
-      colorOriginal: 0x00ffff 
-    };
+    // Metadata para que el VisorEscena sepa qué es
+    grupo.userData = { tipo: 'input', id: etiqueta };
 
-    return grupoInput;
+    return grupo;
   }
 }
