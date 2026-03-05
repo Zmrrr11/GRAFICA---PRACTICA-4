@@ -29,3 +29,4 @@ export class CampoEntrada {
     return grupo;
   }
 }
+//pruba par subir
